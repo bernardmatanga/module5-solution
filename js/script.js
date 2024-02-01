@@ -63,35 +63,35 @@ var switchMenuToActive = function () {
 // On page load (before images or CSS)
 document.addEventListener("DOMContentLoaded", function (event) {
 
-// TODO: STEP 0: Look over the code from
-// *** start ***
-// to
-// *** finish ***
-// below.
-// We changed this code to retrieve all categories from the server instead of
-// simply requesting home HTML snippet. We now also have another function
-// called buildAndShowHomeHTML that will receive all the categories from the server
-// and process them: choose random category, retrieve home HTML snippet, insert that
-// random category into the home HTML snippet, and then insert that snippet into our
-// main page (index.html).
-//
-// TODO: STEP 1: Substitute [...] below with the *value* of the function buildAndShowHomeHTML,
-// so it can be called when server responds with the categories data.
+  // TODO: STEP 0: Look over the code from
+  // *** start ***
+  // to
+  // *** finish ***
+  // below.
+  // We changed this code to retrieve all categories from the server instead of
+  // simply requesting home HTML snippet. We now also have another function
+  // called buildAndShowHomeHTML that will receive all the categories from the server
+  // and process them: choose random category, retrieve home HTML snippet, insert that
+  // random category into the home HTML snippet, and then insert that snippet into our
+  // main page (index.html).
+  //
+  // TODO: STEP 1: Substitute buildAndShowHomeHTML below with the *value* of the function,
+  // so it can be called when server responds with the categories data.
 
-// *** start ***
-// On first load, show home view
-showLoading("#main-content");
-$ajaxUtils.sendGetRequest(
-  allCategoriesUrl,
-  [...], // ***** <---- TODO: STEP 1: Substitute [...] ******
-  true); // Explicitly setting the flag to get JSON from server processed into an object literal
+  // *** start ***
+  // On first load, show home view
+  showLoading("#main-content");
+  $ajaxUtils.sendGetRequest(
+    allCategoriesUrl,
+    buildAndShowHomeHTML, // ***** <---- TODO: STEP 1: Substitute buildAndShowHomeHTML ******
+    true); // Explicitly setting the flag to get JSON from server processed into an object literal
+  // *** finish ***
 });
-// *** finish **
 
 
 // Builds HTML for the home page based on categories array
 // returned from the server.
-function buildAndShowHomeHTML (categories) {
+function buildAndShowHomeHTML(categories) {
 
   // Load home snippet page
   $ajaxUtils.sendGetRequest(
@@ -101,8 +101,7 @@ function buildAndShowHomeHTML (categories) {
       // TODO: STEP 2: Here, call chooseRandomCategory, passing it retrieved 'categories'
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
       // variable's name implies it expects.
-      // var chosenCategoryShortName = ....
-
+      var chosenCategory = chooseRandomCategory(categories);
 
       // TODO: STEP 3: Substitute {{randomCategoryShortName}} in the home html snippet with the
       // chosen category from STEP 2. Use existing insertProperty function for that purpose.
@@ -114,22 +113,19 @@ function buildAndShowHomeHTML (categories) {
       // $dc.loadMenuItems('L')
       // Hint: you need to surround the chosen category short name with something before inserting
       // it into the home html snippet.
-      //
-      // var homeHtmlToInsertIntoMainPage = ....
-
+      var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, 'randomCategoryShortName', chosenCategory.short_name);
 
       // TODO: STEP 4: Insert the produced HTML in STEP 3 into the main page
       // Use the existing insertHtml function for that purpose. Look through this code for an example
       // of how to do that.
-      // ....
-
+      insertHtml("#main-content", homeHtmlToInsertIntoMainPage);
     },
     false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
 }
 
 
 // Given array of category objects, returns a random category object.
-function chooseRandomCategory (categories) {
+function chooseRandomCategory(categories) {
   // Choose a random index into the array (from 0 inclusively until array length (exclusively))
   var randomArrayIndex = Math.floor(Math.random() * categories.length);
 
@@ -159,7 +155,7 @@ dc.loadMenuItems = function (categoryShort) {
 
 // Builds HTML for the categories page based on the data
 // from the server
-function buildAndShowCategoriesHTML (categories) {
+function buildAndShowCategoriesHTML(categories) {
   // Load title snippet of categories page
   $ajaxUtils.sendGetRequest(
     categoriesTitleHtml,
@@ -215,7 +211,7 @@ function buildCategoriesViewHtml(categories,
 
 // Builds HTML for the single category page based on the data
 // from the server
-function buildAndShowMenuItemsHTML (categoryMenuItems) {
+function buildAndShowMenuItemsHTML(categoryMenuItems) {
   // Load title snippet of menu items page
   $ajaxUtils.sendGetRequest(
     menuItemsTitleHtml,
